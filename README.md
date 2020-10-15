@@ -13,9 +13,10 @@ Qu'en est-il réellement? Nous allons analyser ces mêmes données et tenter de 
 ## Questions pour la réunion du 16/10/2020
 
 ### Concernant les articles
-- Différences entre RNAseq/WES ?
+- Différences entre les deux jeux de données ? RNAseq vs. WES ? Deux cohortes de patients ?
 
 ### Techniques
+- Formuler plus précisément la problématique: gènes différentiellement exprimés ? Gènes différentiellement épissés ? Se focaliser sur quoi ?
 - Utiliser dockerhub?
 - Importance des résultats obtenus dans l'évaluation ? Si oui, comment estimer si les différences qu'on trouve entre échantillons sont significatives ?
 - Rapport en anglais?
