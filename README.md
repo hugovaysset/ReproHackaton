@@ -20,7 +20,7 @@ Qu'en est-il réellement? Nous allons analyser ces mêmes données et tenter de 
 #### Général
 - Formuler plus précisément la problématique: gènes différentiellement exprimés ? Tenter d'expliquer pourquoi les deux publications arrivent à des conclusions différentes? Approche naïve ou se focaliser sur les gènes qui sont repérés comme étant différentiellement exprimés, et sur les régions d'épissage observées ? (ABCC, CRNDE, UQCC)
 - Rapport en anglais?
-- Mêmes données entre les deux articles ?
+- Mêmes données entre les deux articles ? Oui.
 
 #### Technique
 - Importance des résultats obtenus dans l'évaluation ?
