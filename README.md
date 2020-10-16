@@ -18,10 +18,11 @@ Qu'en est-il réellement? Nous allons analyser ces mêmes données et tenter de 
 ### Projet
 
 #### Général
-- Formuler plus précisément la problématique: gènes différentiellement exprimés ? Gènes différentiellement épissés ? Se focaliser sur quoi ? Tenter d'expliquer pourquoi les deux publications arrivent à des conclusions différentes? Approche naïve ou se focaliser sur les gènes qui sont repérés comme étant différentiellement exprimés, et sur les régions d'épissage observées ? (ABCC, CRNDE, UQCC)
+- Formuler plus précisément la problématique: gènes différentiellement exprimés ? Tenter d'expliquer pourquoi les deux publications arrivent à des conclusions différentes? Approche naïve ou se focaliser sur les gènes qui sont repérés comme étant différentiellement exprimés, et sur les régions d'épissage observées ? (ABCC, CRNDE, UQCC)
 - Rapport en anglais?
+- Mêmes données entre les deux articles ?
 
 #### Technique
-- A partir du nombre de reads par région, on est en droit de dire si une région est différentiellement exprimée?
-- Utiliser dockerhub? Un conteneur encapsulant le workflow ou un workflow appelant des conteneurs?
-- Importance des résultats obtenus dans l'évaluation ? Si oui, comment estimer si les différences qu'on trouve entre échantillons sont significatives ?
+- Importance des résultats obtenus dans l'évaluation ?
+- Rapport individuel 
+- Pipeline décrit sur les diapos envoyées ?
