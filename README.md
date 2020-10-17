@@ -1,8 +1,8 @@
 # Projet ReproHackaton
 
 ## Ressources
-- Dépôt github (contient le code du projet) 
-- Google drive (contient les fichiers binaires (articles, documentations, rapport)) 
+- Dépôt github (contient le code du projet)
+- Google drive (contient les fichiers binaires (articles, documentations, rapport))
 - Données: issues de Harbour et al. (Nat. Genet. 2013) disponibles au SRA, numéros [SRA062369](https://www.ncbi.nlm.nih.gov/sra?term=SRA062369) et [SRA062359](https://www.ncbi.nlm.nih.gov/sra?term=SRA062359). Attention : *Exome sequences and RNA-seq data are available at the NCBI Sequence Read Archive (SRA) under accessions SRA062369 and SRA062359, respectively).* A voir.
 
 ## Objectifs
@@ -24,5 +24,17 @@ Qu'en est-il réellement? Nous allons analyser ces mêmes données et tenter de 
 
 #### Technique
 - Importance des résultats obtenus dans l'évaluation ?
-- Rapport individuel 
+- Rapport individuel
 - Pipeline décrit sur les diapos envoyées ?
+
+# Lancer le pipeline sur la VM
+Pour pouvoir lancer le pipeline nextflow an arrière plan et donc pouvoir se déconnecter de sa session ssh, il y a deux méthodes possibles : 
+- Processus en arrière plan : `nextflow run main.nf 2>&1 pipeline.log`
+- le pipeline tourne maintenant en arrière plan sur la VM. Pour connaitre le statut d'éxécution : `cat pipeline.log`
+
+- Utilisation de screen (Permet de lancer plusieurs session de terminal en arrière plan)
+    - Création d'un screen : `screen -S nextflow`
+    - Un nouveau shell se lance, on lance les commandes nécessaire pour l'éxécution du pipeline
+    - Pour se détacher de se terminal il suffit de faire : ctrl+a puis d
+    - Pour se reconnecter au screen : `screen -r nextflow`
+    - Pour fermer le screen définitivement (une fois l'analyse fermer par exemple) : `exit` dans le screen
