@@ -28,13 +28,7 @@ Qu'en est-il réellement? Nous allons analyser ces mêmes données et tenter de 
 - Pipeline décrit sur les diapos envoyées ?
 
 # Lancer le pipeline sur la VM
-Pour pouvoir lancer le pipeline nextflow an arrière plan et donc pouvoir se déconnecter de sa session ssh, il y a deux méthodes possibles : 
-- Processus en arrière plan : `nextflow run main.nf 2>&1 pipeline.log`
-- le pipeline tourne maintenant en arrière plan sur la VM. Pour connaitre le statut d'éxécution : `cat pipeline.log`
-
-- Utilisation de screen (Permet de lancer plusieurs session de terminal en arrière plan)
-    - Création d'un screen : `screen -S nextflow`
-    - Un nouveau shell se lance, on lance les commandes nécessaire pour l'éxécution du pipeline
-    - Pour se détacher de se terminal il suffit de faire : ctrl+a puis d
-    - Pour se reconnecter au screen : `screen -r nextflow`
-    - Pour fermer le screen définitivement (une fois l'analyse fermer par exemple) : `exit` dans le screen
+Pour pouvoir lancer le pipeline nextflow an arrière plan et donc pouvoir se déconnecter de sa session ssh: 
+- Lancer le processus en arrière plan : `nextflow -bg run main.nf 2>&1 pipeline.log`
+- le pipeline tourne maintenant en arrière plan sur la VM. Pour connaitre l'étape d'éxécution : `cat pipeline.log`
+- `nextflow log` permet de connaitre le statut d'éxécution du pipeline.
