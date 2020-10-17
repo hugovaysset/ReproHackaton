@@ -1,7 +1,7 @@
 #! /usr/bin/env nextflow
 
 SRA="SRR628582"
-chr_list = Channel.of(1..22,'M','X','Y')
+chr_list = Channel.of(1..22,'MT','X','Y')
 
 process getFASTQ {
     input:
@@ -25,7 +25,7 @@ process getChrSeq {
     
     script:
     """
-    wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/chromosomes/chr${chr}.fa.gz
+    wget -O chr${chr}.fa.gz ftp://ftp.ensembl.org/pub/release-101/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.${chr}.fa.gz
     """
 }
 
@@ -45,6 +45,14 @@ process makeGenomeIndex {
 }
 
 process getAnnotations {
+    output:
+    file 'Homo_sapiens.GRCh38.101.chr.gtf' into gtf_file
+
+    script:
+    """
+    wget ftp://ftp.ensembl.org/pub/release-101/gtf/homo_sapiens/Homo_sapiens.GRCh38.101.chr.gtf.gz
+    gunzip Homo_sapiens.GRCh38.101.chr.gtf.gz 
+    """
 
 }
 
