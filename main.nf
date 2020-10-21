@@ -86,7 +86,7 @@ process indexBAM {
     file bam from bamfiles
 
     output:
-    file "${bam}.bai" into bamfilesindex
+    tuple file("${bam}.bai"), file("${bam}") into bamfilesindex
 
     script:
     """
@@ -97,7 +97,7 @@ process indexBAM {
 process countFeature {
     input:
     file "input.gtf" from gtf_file
-    file bam from bamfilesindex
+    tuple file(bai), file(bam) from bamfilesindex
 
     output:
     file "output.counts" into counts
