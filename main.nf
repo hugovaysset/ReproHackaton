@@ -8,7 +8,7 @@ process getFASTQ {
     val SRAID from SRA
 
     output:
-    tuple file("${SRAID}_1.fastq.gz"), file("${SRAID}_2.fastq.gz") into fastq_files
+    tuple val(${SRAID}), file("${SRAID}_1.fastq.gz"), file("${SRAID}_2.fastq.gz") into fastq_files
     
     script:
     """
@@ -57,11 +57,41 @@ process getAnnotations {
 }
 
 process mapFASTQ {
+    input:
+    path ref from genome_idx
+    tuple val(SRAID), file("read1.fa.gz"), file("read2.fa.gz") from fastq_files
 
+    output:
+    file "${SRAID}.bam" into bamfiles
+
+    script:
+    """
+    STAR --genomeDir ${ref} \
+        --runThreadN ${task.cpus} \
+        --readFilesCommand zcat \
+        --readFilesIn read1.fa.gz read2.fa.gz \
+        --outSAMtype BAM SortedByCoordinate \
+        --outSAMstrandField intronMotif \
+        --outSAMunmapped None \
+        --outFilterMismatchNmax 4 \
+        --outFilterMultimapNmax 10 \
+        --outStd BAM_SortedByCoordinate \
+        --genomeLoad NoSharedMemory \
+        --limitBAMsortRAM ${task.memory} > ${SRAID}.bam
+    """
 }
 
 process indexBAM {
+    input:
+    file bam from bamfiles
 
+    output:
+    file "*.bai" into bamfilesindex
+
+    script:
+    """
+    samtools index ${bam}
+    """
 }
 
 process countFeature {
