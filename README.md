@@ -29,6 +29,6 @@ Qu'en est-il réellement? Nous allons analyser ces mêmes données et tenter de 
 
 # Lancer le pipeline sur la VM
 Pour pouvoir lancer le pipeline nextflow an arrière plan et donc pouvoir se déconnecter de sa session ssh: 
-- Lancer le processus en arrière plan : `nextflow -bg run main.nf 2>&1 pipeline.log`
+- Lancer le processus en arrière plan : `nextflow -bg -log pipeline.log run main.nf`
 - le pipeline tourne maintenant en arrière plan sur la VM. Pour connaitre l'étape d'éxécution : `cat pipeline.log`
 - `nextflow log` permet de connaitre le statut d'éxécution du pipeline.
