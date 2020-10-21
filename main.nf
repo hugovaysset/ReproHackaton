@@ -86,7 +86,7 @@ process indexBAM {
     file bam from bamfiles
 
     output:
-    file "*.bai" into bamfilesindex
+    file "${bam}.bai" into bamfilesindex
 
     script:
     """
@@ -95,5 +95,18 @@ process indexBAM {
 }
 
 process countFeature {
+    input:
+    file "input.gtf" from gtf_file
+    file bam from bamfilesindex
+
+    output:
+
+    script:
+    """
+    featureCounts -T ${task.cpus} -t gene -g gene_id -s 0 -a input.gtf -o output.counts ${bam}
+    """
+}
+
+process statAnalysis {
 
 }
