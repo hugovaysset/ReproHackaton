@@ -8,7 +8,7 @@ process getFASTQ {
     val SRAID from SRA
 
     output:
-    tuple val(${SRAID}), file("${SRAID}_1.fastq.gz"), file("${SRAID}_2.fastq.gz") into fastq_files
+    tuple val("${SRAID}""), file("${SRAID}_1.fastq.gz"), file("${SRAID}_2.fastq.gz") into fastq_files
     
     script:
     """
@@ -101,7 +101,7 @@ process countFeature {
 
     output:
     file "output.counts" into counts
-    
+
     script:
     """
     featureCounts -T ${task.cpus} -t gene -g gene_id -s 0 -a input.gtf -o output.counts ${bam}
