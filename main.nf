@@ -100,7 +100,8 @@ process countFeature {
     file bam from bamfilesindex
 
     output:
-
+    file "output.counts" into counts
+    
     script:
     """
     featureCounts -T ${task.cpus} -t gene -g gene_id -s 0 -a input.gtf -o output.counts ${bam}
