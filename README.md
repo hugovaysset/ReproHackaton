@@ -3,31 +3,25 @@
 ## Ressources
 - Dépôt github (contient le code du projet)
 - Google drive (contient les fichiers binaires (articles, documentations, rapport))
-- Données: issues de Harbour et al. (Nat. Genet. 2013) disponibles au SRA, numéros [SRA062369](https://www.ncbi.nlm.nih.gov/sra?term=SRA062369) et [SRA062359](https://www.ncbi.nlm.nih.gov/sra?term=SRA062359). Attention : *Exome sequences and RNA-seq data are available at the NCBI Sequence Read Archive (SRA) under accessions SRA062369 and SRA062359, respectively).* A voir.
+- Données: issues de Harbour et al. (Nat. Genet. 2013) disponibles au [SRA](https://www.ncbi.nlm.nih.gov/Traces/study/?acc=SRP017413&o=acc_s%3Aa).
 
 ## Objectifs
-Dans un article de 2013, [Harbour et al.](https://drive.google.com/file/d/1mR2oxIx7IG2UqzZr1kt1vVCcWvMr6b8B/view?usp=sharing) publient des données de RNAseq de patients atteints d'un mélanome, et ayant ou non le gène SF3B1 muté ; alors que cette protéine est impliquée dans l'épissage, ils ne mettent pas en évidence de différence entre les deux groupes de patients. Un second article publié par [Furney et al.](https://drive.google.com/file/d/1MSxQ1XNcuXBHLKFrOiXP3Xhky4Q00pmb/view?usp=sharing) met en évidence des différences d'épissage entre les deux groupes en ré-analysant le même jeu de données.
+Dans un article de 2013, [Harbour et al.](https://drive.google.com/file/d/1mR2oxIx7IG2UqzZr1kt1vVCcWvMr6b8B/view?usp=sharing) ([Identifiant SRA](https://trace.ncbi.nlm.nih.gov/Traces/sra/?study=SRP017413)) publient des données de RNAseq de patients atteints d'un mélanome, et ayant ou non le gène *SF3B1* muté ; alors que cette protéine est impliquée dans l'épissage, ils ne mettent pas en évidence de différence entre les deux groupes de patients. Un second article publié par [Furney et al.](https://drive.google.com/file/d/1MSxQ1XNcuXBHLKFrOiXP3Xhky4Q00pmb/view?usp=sharing) met en évidence des différences d'épissage entre les deux groupes en ré-analysant le même jeu de données.
 
-Qu'en est-il réellement? Nous allons analyser ces mêmes données et tenter de trouver des différences d'epression chez certains gènes entre les deux groupes de patients. L'enjeu principal est de produire une analyse qui soit complètement reproductible.
+Nous nous intéressons dans un premier temps à identifier quels sont les gènes qui sont différentiellement exprimés entre les deux cohortes de patients. Nous portons une attention particulière à la reproductibilité de notre pipeline d'analyse bioinformatique.
 
-## Questions pour la réunion du 16/10/2020
+## Méthodes
 
-### Concernant les articles
-- Différences entre les deux jeux de données ? RNAseq vs. WES ? Deux cohortes de patients ?
+Pour garantir la reproductibilité de notre pipeline d'analyse, nous utilisons le gestionnaire de workflow *nextflow*. Les étapes du workflow sont les suivantes:
+1. Récupération des données de séquençage.
+2. Récupération du génome de référence sur le site du [NCBI](https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.39) et les [annotations](ftp://ftp.ensembl.org/pub/release-101/gtf/homo_sapiens/Homo_sapiens.GRCh38.101.chr.gtf.gz) de ce génome.
+3. Alignement des reads sur le génome de référence en utilisant l'outil [STAR](https://github.com/alexdobin/STAR).
+4. Attribution des reads à chacun des gènes à partir du résultat de l'alginement (fichier BAM) via l'outil.
+5. Analyse statistique avec le package R [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html).
 
-### Projet
+## Notes
 
-#### Général
-- Formuler plus précisément la problématique: gènes différentiellement exprimés ? Tenter d'expliquer pourquoi les deux publications arrivent à des conclusions différentes? Approche naïve ou se focaliser sur les gènes qui sont repérés comme étant différentiellement exprimés, et sur les régions d'épissage observées ? (ABCC, CRNDE, UQCC)
-- Rapport en anglais?
-- Mêmes données entre les deux articles ? Oui.
-
-#### Technique
-- Importance des résultats obtenus dans l'évaluation ?
-- Rapport individuel
-- Pipeline décrit sur les diapos envoyées ?
-
-# Lancer le pipeline sur la VM
+### Lancer le pipeline sur la VM
 Pour pouvoir lancer le pipeline nextflow an arrière plan et donc pouvoir se déconnecter de sa session ssh: 
 - Lancer le processus en arrière plan : `nextflow -bg -log pipeline.log run main.nf`
 - le pipeline tourne maintenant en arrière plan sur la VM. Pour connaitre l'étape d'éxécution : `cat pipeline.log`
