@@ -1,6 +1,6 @@
 #! /usr/bin/env nextflow
 
-SRA="SRR628582"
+SRA=Channel.of("SRR628582","SRR628583","SRR628584","SRR628585","SRR628586","SRR628587","SRR628588","SRR628589")
 chr_list = Channel.of(1..22,'MT','X','Y')
 
 process getFASTQ {
@@ -86,7 +86,7 @@ process indexBAM {
     file bam from bamfiles
 
     output:
-    tuple file("${bam}.bai"), file("${bam}") into bamfilesindex
+    tuple file("${bam}.bai"), file("${bam}") into indexedBAM
 
     script:
     """
@@ -97,7 +97,9 @@ process indexBAM {
 process countFeature {
     input:
     file "input.gtf" from gtf_file
-    tuple file(bai), file(bam) from bamfilesindex
+    file bam from indexedBAM.flatten().filter(~/.*bam$/).collect() 
+    // as the indexedBAM channel contains both bam and the corresponding index, filter to only pass bam file to featureCounts
+
 
     output:
     file "output.counts" into counts
@@ -107,7 +109,8 @@ process countFeature {
     featureCounts -T ${task.cpus} -t gene -g gene_id -s 0 -a input.gtf -o output.counts ${bam}
     """
 }
-
+/*
 process statAnalysis {
 
 }
+*/
