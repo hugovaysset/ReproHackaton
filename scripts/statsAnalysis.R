@@ -1,35 +1,39 @@
 #!/usr/bin/Rscript --slave
 
-# library("DESeq2")
+library("DESeq2")
 
+# Get path arguments given in command line
 args <- commandArgs(TRUE)
 
 input_path <- args[1]
-output_path <- args[2]
+metadata_path <- args[2]
+output_path <- args[3]
 
-cat("Input/output paths:\n")
-print(input_path)
-print(output_path)
+# Load data
+countData <- as.matrix(read.csv(input_path, header=TRUE, sep=";"))
+metaData <- as.data.frame(read.csv(metadata_path, header=TRUE, sep=";"))
 
-# countData <- as.matrix(read.csv(input_path, header=TRUE, sep=";"))
+# Instantiate the DESeq data class
+dds <- DESeqDataSetFromMatrix(countData=countData, 
+                              colData=metaData, 
+                              design=~ WT + mutated, tidy=TRUE)
 
-# # eventuellement travail de renommage et verification des colonnes
-# # we need : countdata (matrix of read counts) and coldata (metadata on the
-# # conditions)
+# Run analysis
+dds <- DESeq(dds)
 
-# # Instantiate the DESeq data class
-# dds <- DESeqDataSetFromMatrix(countData=countData, 
-#                               colData=metaData, 
-#                               design=~ WT + mutated, tidy=TRUE)
+# Extract the results
+res <- results(dds)
+resOrdered <- res[order(res$padj),]
+resFiltered <- subset(resOrdered, padj < 0.1)
+write.csv( as.data.frame(resFiltered), file=output_path )
 
-# # run analysis. The DESeq command wraps three steps
+
+# Eventuellement travail de renommage et verification des colonnes
+# we need : countdata (matrix of read counts) and coldata (metadata on the
+# conditions, columns should be c("sample", "patient", "treatment", "time") )
+
+# # Run analysis : 
+# # The DESeq command wraps three steps
 # # dds <- estimateSizeFactors(dds)
 # # dds <- estimateDispersions(dds)
 # # dds <- nbinomWaldTest(dds)
-# dds <- DESeq(dds)
-
-# # extract the results
-# res <- results(dds)
-# resOrdered <- res[order(res$pvalue),]
-# resFiltered <- subset(resOrdered, padj < 0.1)
-# write.csv( as.data.frame(resFiltered), file=output_path )
