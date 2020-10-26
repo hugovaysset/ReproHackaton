@@ -109,8 +109,22 @@ process countFeature {
     featureCounts -T ${task.cpus} -t gene -g gene_id -s 0 -a input.gtf -o output.counts ${bam}
     """
 }
-/*
-process statAnalysis {
 
+
+process statAnalysis {
+    input:
+    // real scenario : input is a file created by a previous process
+    file input from fileChannel
+    val metadata from "~/essais_nextflow/resources/metadata.csv"  // absolute
+    val output from "~/essais_nextflow/resources/output.txt" // absolute required
+
+    // no output required (end of the pipeline)
+    // output:
+    // file "~/essais_nextflow/resources/output.txt" into statsResults
+
+    script:
+    // Absolute path required
+    """
+    ~/essais_nextflow/statsAnalysis.R ${input} ${metadata} ${output} > ${output}
+    """
 }
-*/
