@@ -113,10 +113,9 @@ process countFeature {
 
 process statAnalysis {
     input:
-    // real scenario : input is a file created by a previous process
     file input from fileChannel
-    val metadata from "~/essais_nextflow/resources/metadata.csv"  // absolute
-    val output from "~/essais_nextflow/resources/output.txt" // absolute required
+    val metadata from "/tmp/resources/metadata.csv"  // /tmp dir in container
+    val output from "/tmp/essais_nextflow/resources/output.txt" 
 
     // no output required (end of the pipeline)
     // output:
@@ -125,6 +124,6 @@ process statAnalysis {
     script:
     // Absolute path required
     """
-    ~/essais_nextflow/statsAnalysis.R ${input} ${metadata} ${output} > ${output}
+    /tmp/statsAnalysis.R ${input} ${metadata} ${output} > ${output}
     """
 }

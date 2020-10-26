@@ -10,8 +10,8 @@ metadata_path <- args[2]  # generer les metadonnes dans un process a part ?
 output_path <- args[3]
 
 # Load data
-countData <- as.matrix(read.csv(input_path, header=TRUE, sep=";"))
-metaData <- as.data.frame(read.csv(metadata_path, header=TRUE, sep=";"))
+countData <- as.matrix(read.csv(input_path, header=TRUE, sep="\t"))
+metaData <- as.data.frame(read.csv(metadata_path, header=TRUE, sep=","))
 
 # Instantiate the DESeq data class
 dds <- DESeqDataSetFromMatrix(countData=countData, 
