@@ -78,10 +78,8 @@ process mapFASTQ { //This process permit to align the samples of interest with t
         --readFilesIn read1.fa.gz read2.fa.gz \
         --outSAMtype BAM SortedByCoordinate \
         --outSAMstrandField intronMotif \
-        --outSAMunmapped None \
-        //Unmapped region are not keeped
-        --outFilterMismatchNmax 4 \
-        //Mismatches are limited to 4
+        --outSAMunmapped None \             //Unmapped region are not keeped
+        --outFilterMismatchNmax 4 \         //Mismatches are limited to 4
         --outFilterMultimapNmax 10 \
         --outStd BAM_SortedByCoordinate \
         --genomeLoad NoSharedMemory \
