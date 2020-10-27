@@ -1,9 +1,9 @@
 #! /usr/bin/env nextflow
 
-SRA = Channel.of("SRR628582","SRR628583","SRR628584","SRR628585","SRR628586","SRR628587","SRR628588","SRR628589") //Channel with all the SRA id of interest
-chr_list = Channel.of(1..22,'MT','X','Y')
+SRA = Channel.of("SRR628582","SRR628583","SRR628584","SRR628585","SRR628586","SRR628587","SRR628588","SRR628589") //Channel containing all the SRA id of the samples of interest 
+chr_list = Channel.of(1..22,'MT','X','Y') //Channel containing all the human chromosomes (including mitochondrial DNA)
 
-process getFASTQ {
+process getFASTQ { //This process permit to create two compressed fastqc files for each samples of interest (one corresponding to the 5'3' sequencing and the other to the 3'5' sequencing)
     input:
     val SRAID from SRA
 
@@ -16,7 +16,7 @@ process getFASTQ {
     """
 }
 
-process getChrSeq {
+process getChrSeq { //This process permit to create compressed fasta files for each human chromosome
     input:
     val chr from chr_list
     
@@ -29,7 +29,7 @@ process getChrSeq {
     """
 }
 
-process makeGenomeIndex {
+process makeGenomeIndex { //This process permit to create ??
     input:
     file '*.fa.gz' from chrfa.collect()
 
