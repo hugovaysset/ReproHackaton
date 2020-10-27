@@ -49,7 +49,8 @@ process makeGenomeIndex { //This process permit to index the entire human genom
 }
 
 process getAnnotations { //This process permit to collect the latest available version of the human genome annotations
-//It creates a unique gtf file 
+//It creates a unique gtf file
+////Unmapped regeions were not keeped - Mismatches are limited to 4 - 
     output:
     file 'Homo_sapiens.GRCh38.101.chr.gtf' into gtf_file
 
@@ -63,6 +64,7 @@ process getAnnotations { //This process permit to collect the latest available v
 
 process mapFASTQ { //This process permit to align the samples of interest with the entire human genome
 //It creates BAM files
+//Unmapped region are not keeped
     input:
     path ref from genome_idx
     tuple val(SRAID), file("read1.fa.gz"), file("read2.fa.gz") from fastq_files
@@ -78,8 +80,8 @@ process mapFASTQ { //This process permit to align the samples of interest with t
         --readFilesIn read1.fa.gz read2.fa.gz \
         --outSAMtype BAM SortedByCoordinate \
         --outSAMstrandField intronMotif \
-        --outSAMunmapped None \             //Unmapped region are not keeped
-        --outFilterMismatchNmax 4 \         //Mismatches are limited to 4
+        --outSAMunmapped None \             
+        --outFilterMismatchNmax 4 \         
         --outFilterMultimapNmax 10 \
         --outStd BAM_SortedByCoordinate \
         --genomeLoad NoSharedMemory \
