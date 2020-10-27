@@ -47,7 +47,7 @@ process makeGenomeIndex { //This process permit to create ??
 }
 
 process getAnnotations { //This process permit to collect the latest available version of the human genome annotations
-//It creates a unique genom transfert file 
+//It creates a unique ?? file 
     output:
     file 'Homo_sapiens.GRCh38.101.chr.gtf' into gtf_file
 
