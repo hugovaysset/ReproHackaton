@@ -10,13 +10,15 @@ metadata_path <- args[2]  # generer les metadonnes dans un process a part ?
 output_path <- args[3]
 
 # Load data
-countData <- as.matrix(read.csv(input_path, header=TRUE, sep="\t"))
-metaData <- as.data.frame(read.csv(metadata_path, header=TRUE, sep=","))
+countData <- read.csv(input_path, header=TRUE, comment.char="#", sep="	", row.names="Geneid")
+metaData <- as.data.frame(read.csv(metadata_path, row.names=1, sep=","))
+metaData$SF3B1 <- factor(metaData$SF3B1)
+countData <- countData[, rownames(metaData)]
 
 # Instantiate the DESeq data class
 dds <- DESeqDataSetFromMatrix(countData=countData, 
                               colData=metaData, 
-                              design=~ SF3B1, tidy=TRUE)
+                              design=~ SF3B1)
                               # SF3B1 can be WT or Mut : it's the tested factor
 
 # Run analysis
@@ -27,10 +29,6 @@ res <- results(dds)
 resOrdered <- res[order(res$padj),]
 resFiltered <- subset(resOrdered, padj < 0.1)
 write.csv( as.data.frame(resFiltered), file=output_path )
-
-# Eventuellement travail de renommage et verification des colonnes
-# we need : countdata (matrix of read counts) and coldata (metadata on the
-# conditions, columns should be c("sample", "patient", "treatment", "time") )
 
 # # Run analysis : 
 # # The DESeq command wraps three steps
