@@ -112,18 +112,18 @@ process countFeature {
 
 
 process statAnalysis {
+    // all paths are /tmp/ : it is the mount point of $baseDire in the container
     input:
-    file input from fileChannel
-    val metadata from "/tmp/resources/metadata.csv"  // /tmp dir in container
-    val output from "/tmp/essais_nextflow/resources/output.txt" 
+    file input from fileChannel  // output of featureCounts
+    val metadata from "/tmp/resources/metadata.csv"  // coldata
+    val output from "/tmp/resources/gene_express_FC.csv"  //output path
 
     // no output required (end of the pipeline)
     // output:
-    // file "~/essais_nextflow/resources/output.txt" into statsResults
+    // file "$baseDir/resources/output.txt" into statsResults
 
     script:
-    // Absolute path required
     """
-    /tmp/statsAnalysis.R ${input} ${metadata} ${output} > ${output}
+    /tmp/statsAnalysis.R ${input} ${metadata} ${output}
     """
 }
