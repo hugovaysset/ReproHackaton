@@ -1,6 +1,6 @@
 #! /usr/bin/env nextflow
 
-SRA=Channel.of("SRR628582","SRR628583","SRR628584","SRR628585","SRR628586","SRR628587","SRR628588","SRR628589")
+SRA = Channel.of("SRR628582","SRR628583","SRR628584","SRR628585","SRR628586","SRR628587","SRR628588","SRR628589") //Channel with all the SRA id of interest
 chr_list = Channel.of(1..22,'MT','X','Y')
 
 process getFASTQ {
