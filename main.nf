@@ -32,7 +32,8 @@ process getChrSeq { //This process permit to collect the genomic sequence of eac
     """
 }
 
-process makeGenomeIndex { //This process permit to create ??
+process makeGenomeIndex { //This process permit to index the entire human genom
+//It creates a fasta files (by combining all the fasta files generated at the getChrSeq process) that is then proceded by STAR which generated a lot of different files
     input:
     file '*.fa.gz' from chrfa.collect()
 
@@ -48,7 +49,7 @@ process makeGenomeIndex { //This process permit to create ??
 }
 
 process getAnnotations { //This process permit to collect the latest available version of the human genome annotations
-//It creates a unique ?? file 
+//It creates a unique gtf file 
     output:
     file 'Homo_sapiens.GRCh38.101.chr.gtf' into gtf_file
 
@@ -60,7 +61,8 @@ process getAnnotations { //This process permit to collect the latest available v
 
 }
 
-process mapFASTQ {
+process mapFASTQ { //This process permit to align the samples of interest with the entire human genome
+//It creates BAM files
     input:
     path ref from genome_idx
     tuple val(SRAID), file("read1.fa.gz"), file("read2.fa.gz") from fastq_files
@@ -76,8 +78,8 @@ process mapFASTQ {
         --readFilesIn read1.fa.gz read2.fa.gz \
         --outSAMtype BAM SortedByCoordinate \
         --outSAMstrandField intronMotif \
-        --outSAMunmapped None \
-        --outFilterMismatchNmax 4 \
+        --outSAMunmapped None \ //Unmapped region are not keeped
+        --outFilterMismatchNmax 4 \ //Mismatches are limited to 4
         --outFilterMultimapNmax 10 \
         --outStd BAM_SortedByCoordinate \
         --genomeLoad NoSharedMemory \
