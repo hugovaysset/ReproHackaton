@@ -3,7 +3,8 @@
 SRA = Channel.of("SRR628582","SRR628583","SRR628584","SRR628585","SRR628586","SRR628587","SRR628588","SRR628589") //Channel containing all the SRA id of the samples of interest 
 chr_list = Channel.of(1..22,'MT','X','Y') //Channel containing all the human chromosomes (including mitochondrial DNA)
 
-process getFASTQ { //This process permit to create two compressed fastqc files for each samples of interest (one corresponding to the 5'3' sequencing and the other to the 3'5' sequencing)
+process getFASTQ { //This process permit to collect the genomic sequence of the samples of interest 
+//It creates two compressed fastqc files for each samples of interest (one corresponding to the 5'3' sequencing and the other to the 3'5' sequencing)
     input:
     val SRAID from SRA
 
@@ -16,7 +17,8 @@ process getFASTQ { //This process permit to create two compressed fastqc files f
     """
 }
 
-process getChrSeq { //This process permit to create compressed fasta files for each human chromosome
+process getChrSeq { //This process permit to collect the genomic sequence of each human chromosome
+//It creates a compressed fasta file for each human chromosome
     input:
     val chr from chr_list
     
@@ -44,7 +46,8 @@ process makeGenomeIndex { //This process permit to create ??
     """
 }
 
-process getAnnotations {
+process getAnnotations { //This process permit to collect the latest available version of the human genome annotations
+//It creates a unique genom transfert file 
     output:
     file 'Homo_sapiens.GRCh38.101.chr.gtf' into gtf_file
 
