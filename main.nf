@@ -91,8 +91,8 @@ process mapFASTQ {
         --readFilesIn read1.fa.gz read2.fa.gz \
         --outSAMtype BAM SortedByCoordinate \
         --outSAMstrandField intronMotif \
-        --outSAMunmapped None \             
-        --outFilterMismatchNmax 4 \         
+        --outSAMunmapped None \
+        --outFilterMismatchNmax 4 \
         --outFilterMultimapNmax 10 \
         --outStd BAM_SortedByCoordinate \
         --genomeLoad NoSharedMemory \
