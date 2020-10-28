@@ -141,10 +141,12 @@ process statAnalysis {
 //DESEQ2 allows to determine if there is a significant difference in gene expression between the wild and the mutate condition
 //It uses the counting of the number of reads per gene done in the previous process countFeature
     
+    // /tmp is the mount point of $baseDir in the container
+    // otherwise, sends a No such file or Directory error
     input:
     file input from counts  // output of featureCounts
-    file metadata from "$baseDir/resources/metadata.csv"  // coldata
-    file output from "$baseDir/resources/gene_express_FC.csv"  //output path
+    val metadata from "/tmp/resources/metadata.csv"  // coldata
+    val output from "/tmp/resources/gene_express_FC.csv"  //output path
 
     // no output required (end of the pipeline)
     // output:
@@ -152,6 +154,6 @@ process statAnalysis {
 
     script:
     """
-    $baseDir/scripts/statsAnalysis.R ${input} ${metadata} ${output}
+    /tmp/scripts/statsAnalysis.R ${input} ${metadata} ${output}
     """
 }
