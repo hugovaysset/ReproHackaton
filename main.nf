@@ -1,5 +1,7 @@
 #! /usr/bin/env nextflow
 
+samples_metadata = Channel.fromPath('resources/metadata.csv')
+statAnalysisScript = Channel.fromPath('scripts/statsAnalysis.R')
 SRA = Channel.of("SRR628582","SRR628583","SRR628584","SRR628585","SRR628586","SRR628587","SRR628588","SRR628589") //Channel containing all the SRA id of the samples of interest
 //source: https://www.ncbi.nlm.nih.gov/Traces/study/?acc=SRP017413&o=acc_s%3Aa
 chr_list = Channel.of(1..22,'MT','X','Y') //Channel containing all the human chromosomes (including mitochondrial DNA)
@@ -140,20 +142,20 @@ process statAnalysis {
 //This process permit to perfom statistic analysis of the samples of interest
 //DESEQ2 allows to determine if there is a significant difference in gene expression between the wild and the mutate condition
 //It uses the counting of the number of reads per gene done in the previous process countFeature
-    
+    publishDir "results/DE_genes", mode: 'symlink'
     // /tmp is the mount point of $baseDir in the container
     // otherwise, sends a No such file or Directory error
     input:
     file input from counts  // output of featureCounts
-    val metadata from "/tmp/resources/metadata.csv"  // coldata
-    val output from "/tmp/resources/gene_express_FC.csv"  //output path
+    file metadata from samples_metadata  // coldata
+    file script from statAnalysisScript
 
     // no output required (end of the pipeline)
-    // output:
-    // file "$baseDir/resources/gene_express_FC.csv" into statsResults
+    output:
+    file "gene_express_FC.csv" into statsResults
 
     script:
     """
-    /tmp/scripts/statsAnalysis.R ${input} ${metadata} ${output}
+    Rscript ${script} ${input} ${metadata} "gene_express_FC.csv"
     """
 }
