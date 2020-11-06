@@ -1,0 +1,66 @@
+digraph "dag" {
+p0 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.fromPath"];
+p15 [label="statAnalysis"];
+p0 -> p15 [label="samples_metadata"];
+
+p1 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.fromPath"];
+p15 [label="statAnalysis"];
+p1 -> p15 [label="statAnalysisScript"];
+
+p2 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.of"];
+p4 [label="getFASTQ"];
+p2 -> p4 [label="SRA"];
+
+p3 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.of"];
+p5 [label="getChrSeq"];
+p3 -> p5 [label="chr_list"];
+
+p4 [label="getFASTQ"];
+p9 [label="mapFASTQ"];
+p4 -> p9 [label="fastq_files"];
+
+p5 [label="getChrSeq"];
+p6 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p5 -> p6 [label="chrfa"];
+
+p6 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p7 [label="makeGenomeIndex"];
+p6 -> p7;
+
+p7 [label="makeGenomeIndex"];
+p9 [label="mapFASTQ"];
+p7 -> p9 [label="genome_idx"];
+
+p8 [label="getAnnotations"];
+p14 [label="countFeature"];
+p8 -> p14 [label="gtf_file"];
+
+p9 [label="mapFASTQ"];
+p10 [label="indexBAM"];
+p9 -> p10 [label="bamfiles"];
+
+p10 [label="indexBAM"];
+p11 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="flatten"];
+p10 -> p11 [label="indexedBAM"];
+
+p11 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="flatten"];
+p12 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="filter"];
+p11 -> p12;
+
+p12 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="filter"];
+p13 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p12 -> p13;
+
+p13 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p14 [label="countFeature"];
+p13 -> p14;
+
+p14 [label="countFeature"];
+p15 [label="statAnalysis"];
+p14 -> p15 [label="counts"];
+
+p15 [label="statAnalysis"];
+p16 [shape=point];
+p15 -> p16 [label="statsResults"];
+
+}
