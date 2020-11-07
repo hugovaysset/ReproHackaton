@@ -2,6 +2,7 @@
 
 samples_metadata = Channel.fromPath('resources/metadata.csv')
 statAnalysisScript = Channel.fromPath('scripts/statsAnalysis.R')
+statAnalysisSplicingScript = Channel.fromPath('scripts/statsAnalysisSplicing.R')
 SRA = Channel.of("SRR628582","SRR628583","SRR628584","SRR628585","SRR628586","SRR628587","SRR628588","SRR628589") //Channel containing all the SRA id of the samples of interest
 //source: https://www.ncbi.nlm.nih.gov/Traces/study/?acc=SRP017413&o=acc_s%3Aa
 chr_list = Channel.of(1..22,'MT','X','Y') //Channel containing all the human chromosomes (including mitochondrial DNA)
@@ -137,14 +138,45 @@ process countFeature {
     """
 }
 
+process countExon {
+//This process permit to obtain, for each sample of interest, genes level of expression in case of alternative splicing
+//It counts the number of reads aligned on each exon 
+
+    input:
+    file "input.gtf" from gtf_file
+    file bam from indexedBAM.flatten().filter(~/.*bam$/).collect() 
+    // as the indexedBAM channel contains both bam and the corresponding index, filter to only pass bam file to featureCounts
+
+
+    output:
+    file "output.counts" into exoncounts
+
+    script:
+    """
+    featureCounts -T ${task.cpus} -t exon -g exon_id -s 0 -a input.gtf -o output.counts ${bam}
+    """
+}
+
+process gtf_to_gff {
+// This process permit to transform a gtf file to a gff file
+    input :
+    file 'Annotation_Homo_sapiens.chr.gtf' from gtf_file
+
+    output:
+    file "Annotation_Homo_sapiens.chr.gff" into gff_file
+
+    script:
+    """
+    dexseq_prepare_annotation.py Annotation_Homo_sapiens.chr.gtf Annotation_Homo_sapiens.chr.gff
+    """
+}
 
 process statAnalysis {
 //This process permit to perfom statistic analysis of the samples of interest
 //DESEQ2 allows to determine if there is a significant difference in gene expression between the wild and the mutate condition
 //It uses the counting of the number of reads per gene done in the previous process countFeature
     publishDir "results/DE_genes", mode: 'symlink'
-    // /tmp is the mount point of $baseDir in the container
-    // otherwise, sends a No such file or Directory error
+
     input:
     file input from counts  // output of featureCounts
     file metadata from samples_metadata  // coldata
@@ -157,5 +189,26 @@ process statAnalysis {
     script:
     """
     Rscript ${script} ${input} ${metadata} "gene_express_FC.csv"
+    """
+}
+
+process statAnalysisSplicing {
+//This process permit to perfom statistic analysis of the samples of interest
+//DEXseq allows to determine if there is a significant difference in gene expression in case of alternative splicing between the wild and the mutate condition
+//It uses the counting of the number of reads per exon done in the previous process countExon
+    publishDir "results/DE_splicing", mode: 'symlink'
+
+    input:
+    file input from exoncounts  // output of featureCounts
+    file metadata from samples_metadata  // coldata
+    file script from statAnalysisSplicingScript
+
+    // no output required (end of the pipeline)
+    output:
+    file "splicing_FC.csv" into statsResultsSplicing
+
+    script:
+    """
+    Rscript ${script} ${input} ${metadata} "splicing_FC.csv"
     """
 }
