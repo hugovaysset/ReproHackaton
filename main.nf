@@ -1,6 +1,6 @@
 #! /usr/bin/env nextflow
 
-Channel.fromPath('resources/metadata.csv').into {samples_metadata_1, samples_metadata_2}
+Channel.fromPath('resources/metadata.csv').into {samples_metadata_1; samples_metadata_2}
 SRA = Channel.of("SRR628582","SRR628583","SRR628584","SRR628585","SRR628586","SRR628587","SRR628588","SRR628589") //Channel containing all the SRA id of the samples of interest
 //source: https://www.ncbi.nlm.nih.gov/Traces/study/?acc=SRP017413&o=acc_s%3Aa
 chr_list = Channel.of(1..22,'MT','X','Y') //Channel containing all the human chromosomes (including mitochondrial DNA)
@@ -180,7 +180,6 @@ process statAnalysis {
     input:
     file input from counts  // output of featureCounts
     file metadata from samples_metadata_1  // coldata
-    file script from statAnalysisScript
 
     // no output required (end of the pipeline)
     output:
@@ -201,7 +200,6 @@ process statAnalysisSplicing {
     input:
     file input from exoncounts  // output of featureCounts
     file metadata from samples_metadata_2  // coldata
-    file script from statAnalysisSplicingScript
 
     // no output required (end of the pipeline)
     output:
