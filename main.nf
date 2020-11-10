@@ -200,6 +200,7 @@ process statAnalysisSplicing {
     input:
     file input from exoncounts  // output of featureCounts
     file metadata from samples_metadata_2  // coldata
+    file gtf from gtf_file
 
     // no output required (end of the pipeline)
     output:
@@ -208,6 +209,6 @@ process statAnalysisSplicing {
 
     script:
     """
-    statsAnalysisSplicing.R ${input} ${metadata} "DEXSeq_subread.rds" ${task.cpus}
+    statsAnalysisSplicing.R ${input} ${metadata} ${gtf} "DEXSeq_subread.rds" ${task.cpus}
     """
 }
