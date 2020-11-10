@@ -151,7 +151,7 @@ process countExon {
 
     script:
     """
-    featureCounts -T ${task.cpus} -t exon -g exon_id -s 0 -a input.gtf -o output.counts ${bam}
+    featureCounts -T ${task.cpus} -f -s 0 -a input.gtf -o output.counts ${bam}
     """
 }
 
