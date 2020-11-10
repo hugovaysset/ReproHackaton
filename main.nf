@@ -155,6 +155,7 @@ process countExon {
     """
 }
 
+/*
 process gtf_to_gff {
 // This process permit to transform a gtf file to a gff file
     input :
@@ -168,6 +169,7 @@ process gtf_to_gff {
     dexseq_prepare_annotation.py Annotation_Homo_sapiens.chr.gtf Annotation_Homo_sapiens.chr.gff
     """
 }
+*/
 
 process statAnalysis {
 //This process permit to perfom statistic analysis of the samples of interest
