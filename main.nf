@@ -184,7 +184,7 @@ process statAnalysis {
 
     // no output required (end of the pipeline)
     output:
-    file "gene_express_FC.csv" into statsResults
+    file "gene_express_FC.csv"
 
     script:
     """
@@ -205,10 +205,11 @@ process statAnalysisSplicing {
 
     // no output required (end of the pipeline)
     output:
-    file "splicing_FC.csv" into statsResultsSplicing
+    file "DEXSeq_subread.rds"
+    file "DEXseq_results*"
 
     script:
     """
-    statsAnalysisSplicing.R ${input} ${metadata} "splicing_FC.csv"
+    statsAnalysisSplicing.R ${input} ${metadata} "DEXSeq_subread.rds" ${task.cpus}
     """
 }
