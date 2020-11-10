@@ -1,6 +1,6 @@
 #! /usr/bin/env nextflow
 
-samples_metadata = Channel.fromPath('resources/metadata.csv')
+Channel.fromPath('resources/metadata.csv').into {samples_metadata_1, samples_metadata_2}
 SRA = Channel.of("SRR628582","SRR628583","SRR628584","SRR628585","SRR628586","SRR628587","SRR628588","SRR628589") //Channel containing all the SRA id of the samples of interest
 //source: https://www.ncbi.nlm.nih.gov/Traces/study/?acc=SRP017413&o=acc_s%3Aa
 chr_list = Channel.of(1..22,'MT','X','Y') //Channel containing all the human chromosomes (including mitochondrial DNA)
@@ -109,7 +109,7 @@ process indexBAM {
     file bam from bamfiles
 
     output:
-    tuple file("${bam}.bai"), file("${bam}") into indexedBAM
+    tuple file("${bam}.bai"), file("${bam}") into indexedBAM_1, indexedBAM_2
 
     script:
     """
@@ -123,7 +123,7 @@ process countFeature {
 
     input:
     file "input.gtf" from gtf_file
-    file bam from indexedBAM.flatten().filter(~/.*bam$/).collect() 
+    file bam from indexedBAM_1.flatten().filter(~/.*bam$/).collect() 
     // as the indexedBAM channel contains both bam and the corresponding index, filter to only pass bam file to featureCounts
 
 
@@ -142,7 +142,7 @@ process countExon {
 
     input:
     file "input.gtf" from gtf_file
-    file bam from indexedBAM.flatten().filter(~/.*bam$/).collect() 
+    file bam from indexedBAM_2.flatten().filter(~/.*bam$/).collect() 
     // as the indexedBAM channel contains both bam and the corresponding index, filter to only pass bam file to featureCounts
 
 
@@ -177,7 +177,7 @@ process statAnalysis {
 
     input:
     file input from counts  // output of featureCounts
-    file metadata from samples_metadata  // coldata
+    file metadata from samples_metadata_1  // coldata
     file script from statAnalysisScript
 
     // no output required (end of the pipeline)
@@ -198,7 +198,7 @@ process statAnalysisSplicing {
 
     input:
     file input from exoncounts  // output of featureCounts
-    file metadata from samples_metadata  // coldata
+    file metadata from samples_metadata_2  // coldata
     file script from statAnalysisSplicingScript
 
     // no output required (end of the pipeline)
