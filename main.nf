@@ -1,8 +1,6 @@
 #! /usr/bin/env nextflow
 
 samples_metadata = Channel.fromPath('resources/metadata.csv')
-statAnalysisScript = Channel.fromPath('scripts/statsAnalysis.R')
-statAnalysisSplicingScript = Channel.fromPath('scripts/statsAnalysisSplicing.R')
 SRA = Channel.of("SRR628582","SRR628583","SRR628584","SRR628585","SRR628586","SRR628587","SRR628588","SRR628589") //Channel containing all the SRA id of the samples of interest
 //source: https://www.ncbi.nlm.nih.gov/Traces/study/?acc=SRP017413&o=acc_s%3Aa
 chr_list = Channel.of(1..22,'MT','X','Y') //Channel containing all the human chromosomes (including mitochondrial DNA)
@@ -188,7 +186,7 @@ process statAnalysis {
 
     script:
     """
-    Rscript ${script} ${input} ${metadata} "gene_express_FC.csv"
+    statsAnalysis.R ${input} ${metadata} "gene_express_FC.csv"
     """
 }
 
@@ -209,6 +207,6 @@ process statAnalysisSplicing {
 
     script:
     """
-    Rscript ${script} ${input} ${metadata} "splicing_FC.csv"
+    statsAnalysisSplicing.R ${input} ${metadata} "splicing_FC.csv"
     """
 }
