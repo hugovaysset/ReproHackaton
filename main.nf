@@ -254,7 +254,7 @@ process fastq_screen {
 
     input:
     tuple val(SRAID), file(read1), file(read2) from fastq_files_to_screen
-    path path "FastQ_Screen_Genomes" from FastQ_Screen_Genomes
+    path "FastQ_Screen_Genomes" from FastQ_Screen_Genomes
 
     output:
     file("*_screen.txt") into fastq_screen_txt
