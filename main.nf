@@ -1,8 +1,6 @@
 #! /usr/bin/env nextflow
 
-samples_metadata = Channel.fromPath('resources/metadata.csv')
-statAnalysisScript = Channel.fromPath('scripts/statsAnalysis.R')
-statAnalysisSplicingScript = Channel.fromPath('scripts/statsAnalysisSplicing.R')
+Channel.fromPath('resources/metadata.csv').into {samples_metadata_1; samples_metadata_2}
 SRA = Channel.of("SRR628582","SRR628583","SRR628584","SRR628585","SRR628586","SRR628587","SRR628588","SRR628589") //Channel containing all the SRA id of the samples of interest
 //source: https://www.ncbi.nlm.nih.gov/Traces/study/?acc=SRP017413&o=acc_s%3Aa
 chr_list = Channel.of(1..22,'MT','X','Y') //Channel containing all the human chromosomes (including mitochondrial DNA)
@@ -113,7 +111,7 @@ process indexBAM {
     file bam from bamfiles
 
     output:
-    tuple file("${bam}.bai"), file("${bam}") into indexedBAM
+    tuple file("${bam}.bai"), file("${bam}") into indexedBAM_1, indexedBAM_2
 
     script:
     """
@@ -127,7 +125,7 @@ process countFeature {
 
     input:
     file "input.gtf" from gtf_file
-    file bam from indexedBAM.flatten().filter(~/.*bam$/).collect() 
+    file bam from indexedBAM_1.flatten().filter(~/.*bam$/).collect() 
     // as the indexedBAM channel contains both bam and the corresponding index, filter to only pass bam file to featureCounts
 
 
@@ -147,7 +145,7 @@ process countExon {
 
     input:
     file "input.gtf" from gtf_file
-    file bam from indexedBAM.flatten().filter(~/.*bam$/).collect() 
+    file bam from indexedBAM_2.flatten().filter(~/.*bam$/).collect() 
     // as the indexedBAM channel contains both bam and the corresponding index, filter to only pass bam file to featureCounts
 
 
@@ -157,10 +155,11 @@ process countExon {
 
     script:
     """
-    featureCounts -T ${task.cpus} -t exon -g exon_id -s 0 -a input.gtf -o output_exon.counts ${bam}
+    featureCounts -T ${task.cpus} -f -s 0 -a input.gtf -o output_exon.counts ${bam}
     """
 }
 
+/*
 process gtf_to_gff {
 // This process permits to transform a gtf file to a gff file
     input :
@@ -174,6 +173,7 @@ process gtf_to_gff {
     dexseq_prepare_annotation.py Annotation_Homo_sapiens.chr.gtf Annotation_Homo_sapiens.chr.gff
     """
 }
+*/
 
 process statAnalysis {
 //This process permits to perfom statistic analysis of the samples of interest
@@ -183,15 +183,14 @@ process statAnalysis {
 
     input:
     file input from counts  // output of featureCounts
-    file metadata from samples_metadata  // coldata
-    file script from statAnalysisScript
+    file metadata from samples_metadata_1  // coldata
 
     output:
-    file "gene_express_FC.csv" into statsResults
+    file "gene_express_FC.csv"
 
     script:
     """
-    Rscript ${script} ${input} ${metadata} "gene_express_FC.csv"
+    statsAnalysis.R ${input} ${metadata} "gene_express_FC.csv"
     """
 }
 
@@ -203,15 +202,16 @@ process statAnalysisSplicing {
 
     input:
     file input from exoncounts  // output of featureCounts
-    file metadata from samples_metadata  // coldata
-    file script from statAnalysisSplicingScript
+    file metadata from samples_metadata_2  // coldata
+    file gtf from gtf_file
 
     output:
-    file "splicing_FC.csv" into statsResultsSplicing
+    file "DEXSeq_subread.rds"
+    file "DEXseq_results*"
 
     script:
     """
-    Rscript ${script} ${input} ${metadata} "splicing_FC.csv"
+    statsAnalysisSplicing.R ${input} ${metadata} ${gtf} "DEXSeq_subread.rds" ${task.cpus}
     """
 }
 
