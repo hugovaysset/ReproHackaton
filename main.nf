@@ -237,20 +237,34 @@ process fastqc {
 
 }
 
+process get_fastq_screen_genomes {
+// Get bowtie2 genome index used by fastq_screen
+    output:
+    path "FastQ_Screen_Genomes" into FastQ_Screen_Genomes
+
+    script:
+    """
+    fastq_screen --get_genomes
+    """
+}
+
 process fastq_screen {
 //Fastq_screen is used to compare the reads to a set of sequence databases in order to detect potential samples contaminations
     publishDir "results/fqscreen_results", mode:'symlink'
 
     input:
     tuple val(SRAID), file(read1), file(read2) from fastq_files_to_screen
+    path path "FastQ_Screen_Genomes" from FastQ_Screen_Genomes
 
     output:
     file("*_screen.txt") into fastq_screen_txt
-    file("*_screen.html") into fastq_screen_html
-
+    file("*_screen.html")
+    
     script:
     """
+    sed -i "s|/.*/FastQ_Screen_Genomes|$PWD/FastQ_Screen_Genomes|g" ./FastQ_Screen_Genomes/fastq_screen.conf
     fastq_screen --threads ${task.cpus}\
+                 --conf ./FastQ_Screen_Genomes/fastq_screen.conf
                  --aligner bowtie2\
                  ${read1} ${read2}
     """
