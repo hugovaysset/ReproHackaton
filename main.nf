@@ -228,7 +228,7 @@ process fastqc {
     tuple val(SRAID), file(read1), file(read2) from fastq_files_to_qc
 
     output:
-    file "*_fastq.{zip,html}" into fastqc_results
+    file "${SRAID}_fastq.*" into fastqc_results
 
     script:
     """
@@ -277,7 +277,7 @@ process multi_qc{
     publishDir "results/multiqc_results", mode:'symlink'
 
     input:
-    file '*_fastqc.zip' from fastqc_results.collect()
+    file '*_fastqc.zip' from fastqc_results.collect().filter(~/.*zip$/)
     file '*Log.final.out' from star_stats.collect()
     file 'outputs_gene.count.summary' from counts_summary
     file 'outputs_exon.count.summary' from exoncounts_summary
