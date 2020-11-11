@@ -265,7 +265,7 @@ process fastq_screen {
     """
     sed -i "s|/.*/FastQ_Screen_Genomes|$PWD/FastQ_Screen_Genomes|g" ./FastQ_Screen_Genomes/fastq_screen.conf
     fastq_screen --threads ${task.cpus}\
-                 --conf ./FastQ_Screen_Genomes/fastq_screen.conf
+                 --conf ./FastQ_Screen_Genomes/fastq_screen.conf \
                  --aligner bowtie2\
                  ${read1} ${read2}
     """
