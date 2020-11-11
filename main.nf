@@ -13,7 +13,8 @@ process getFASTQ {
     val SRAID from SRA
 
     output:
-    tuple val("${SRAID}"), file("${SRAID}_1.fastq.gz"), file("${SRAID}_2.fastq.gz") into fastq_files
+    //we triplicate the channel to use it in three different processes : mapFASTQ, fastqc and fastq_screen
+    tuple val("${SRAID}"), file("${SRAID}_1.fastq.gz"), file("${SRAID}_2.fastq.gz") into fastq_files_to_map, fastq_files_to_qc, fastq_files_to_screen
     
     script:
     """
@@ -77,7 +78,7 @@ process mapFASTQ {
 
     input:
     path ref from genome_idx
-    tuple val(SRAID), file("read1.fa.gz"), file("read2.fa.gz") from fastq_files
+    tuple val(SRAID), file("read1.fa.gz"), file("read2.fa.gz") from fastq_files_to_map
 
     output:
     file "${SRAID}.bam" into bamfiles
@@ -224,7 +225,7 @@ process fastqc {
     publishDir "results/fastqc_results", mode: 'symlink'
 
     input:
-    tuple val(SRAID), file(read1), file(read2) from fastq_files
+    tuple val(SRAID), file(read1), file(read2) from fastq_files_to_qc
 
     output:
     file "*_fastq.{zip,html}" into fastqc_results
@@ -241,7 +242,7 @@ process fastq_screen {
     publishDir "results/fqscreen_results", mode:'symlink'
 
     input:
-    tuple val(SRAID), file(read1), file(read2) from fastq_files
+    tuple val(SRAID), file(read1), file(read2) from fastq_files_to_screen
 
     output:
     file("*_screen.txt") into fastq_screen_txt
