@@ -228,7 +228,8 @@ process fastqc {
     tuple val(SRAID), file(read1), file(read2) from fastq_files_to_qc
 
     output:
-    file "${SRAID}_[1-2]_fastq.*" into fastqc_results
+    tuple file("${SRAID}_1_fastq.html"), file("${SRAID}_2_fastq.html")
+    tuple file("${SRAID}_1_fastq.zip"), file("${SRAID}_2_fastq.zip") into fastqc_results
 
     script:
     """
