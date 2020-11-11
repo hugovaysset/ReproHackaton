@@ -99,7 +99,7 @@ process mapFASTQ {
         --outFilterMultimapNmax 10 \
         --outStd BAM_SortedByCoordinate \
         --genomeLoad NoSharedMemory \
-        --outFileNamePrefix ${SRAID}
+        --outFileNamePrefix ${SRAID} \
         --limitBAMsortRAM ${task.memory.toBytes()} > ${SRAID}.bam 
     """
 }
