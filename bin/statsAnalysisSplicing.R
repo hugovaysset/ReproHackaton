@@ -16,39 +16,39 @@ cpus <- as.integer(args[5])
 BPPARAM <-  BiocParallel::MulticoreParam(cpus)
 
 # Parse GTF file for DEXSeq and remove duplicate entries
-aggregates <- read.delim(gtf_path, stringsAsFactors = FALSE, 
-                         header = FALSE, comment.char = "#") %>% 
-  magrittr::set_colnames(c("chr", "source", "class", "start", 
+aggregates <- read.delim(gtf_path, stringsAsFactors = FALSE,
+                         header = FALSE, comment.char = "#") %>%
+  magrittr::set_colnames(c("chr", "source", "class", "start",
                            "end", "ex", "strand", "ex2", "attr")) %>%
   dplyr::filter(class == "exon") %>% # retain only exon entry
-  dplyr::mutate(attr = str_remove_all(attr,"\"|=|;"), 
+  dplyr::mutate(attr = str_remove_all(attr, "\"|=|;"),
                 gene_id = sub(".*gene_id\\s(\\S+).*", "\\1", attr),
                 exon_id = sub(".*exon_id\\s(\\S+).*", "\\1", attr)) %>%
-  dplyr::distinct(gene_id,exon_id,.keep_all = TRUE) 
+  dplyr::distinct(gene_id, exon_id, .keep_all = TRUE)
 
-gene_exon <- dplyr::mutate(aggregates, join = str_c(gene_id,start,end,sep = "-")) %>%
-  dplyr::select(join,exon_id) 
+gene_exon <- dplyr::mutate(aggregates, join = str_c(gene_id, start, end, sep = "-")) %>%
+  dplyr::select(join, exon_id)
 
-transcripts <- gsub(".*transcript_id\\s(\\S+).*", "\\1", 
+transcripts <- gsub(".*transcript_id\\s(\\S+).*", "\\1",
                     aggregates$attr)
 
-exoninfo <- GRanges(as.character(aggregates$chr), IRanges(start = aggregates$start, 
+exoninfo <- GRanges(as.character(aggregates$chr), IRanges(start = aggregates$start,
                                                           end = aggregates$end), strand = aggregates$strand)
 
-names(exoninfo) <- str_c(aggregates$gene_id,aggregates$exon_id,sep = ":")
+names(exoninfo) <- str_c(aggregates$gene_id, aggregates$exon_id, sep = ":")
 
-names(transcripts) <- names(exoninfo) 
+names(transcripts) <- names(exoninfo)
 
-metaData <- as.data.frame(read.csv(metadata_path, row.names=1, sep=","))
+metaData <- as.data.frame(read.csv(metadata_path, row.names = 1, sep = ","))
 metaData$SF3B1 <- factor(metaData$SF3B1)
 
 # Parse count and remove duplicate entries
-read.table(input_path, header = TRUE) %>% 
-  dplyr::arrange(Geneid,Start,End) %>% 
+read.table(input_path, header = TRUE) %>%
+  dplyr::arrange(Geneid, Start, End) %>%
   dplyr::distinct() %>%
-  dplyr::mutate(join = str_c(Geneid,Start,End,sep = "-")) %>%
-  dplyr::inner_join(gene_exon) %>% 
-  dplyr::mutate(name = str_c(Geneid,exon_id,sep = ":")) %>%
+  dplyr::mutate(join = str_c(Geneid, Start, End, sep = "-")) %>%
+  dplyr::inner_join(gene_exon) %>%
+  dplyr::mutate(name = str_c(Geneid, exon_id, sep = ":")) %>%
   magrittr::set_rownames(.$name) %>%
   dplyr::select(-(Geneid:Length), -(join:name)) -> dcounts
 
@@ -65,13 +65,17 @@ stopifnot(all(names(exoninfo[matching]) == rownames(dcounts)))
 stopifnot(all(names(transcripts[matching]) == rownames(dcounts)))
 
 design <- ~sample + exon + SF3B1:exon
-dxd <- DEXSeqDataSet(dcounts, metaData, design, exons, 
+dxd <- DEXSeqDataSet(dcounts, metaData, design, exons,
                      genesrle, exoninfo[matching], transcripts[matching])
 
-dxr <- DEXSeq(dxd, BPPARAM = BPPARAM, fitExpToVar = "SF3B1")
+dxr <- estimateSizeFactors(dxd) %>%
+          estimateDispersions(BPPARAM = BPPARAM) %>%
+          testForDEU(BPPARAM = BPPARAM) %>%
+          estimateExonFoldChanges(BPPARAM = BPPARAM,fitExpToVar = "SF3B1") %>%
+          DEXSeqResults()
 
 # Plot if differential splicing
-results <- dxr[which(dxr$padj < 0.1),]
+results <- dxr[which(dxr$padj < 0.1), ]
 
 if (!is.null(nrow(results@listData))) {
     for (gene in results$groupID) {
