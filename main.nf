@@ -99,7 +99,7 @@ process mapFASTQ {
         --outFilterMultimapNmax 10 \
         --outStd BAM_SortedByCoordinate \
         --genomeLoad NoSharedMemory \
-        --outfileNamePrefix ${SRAID}
+        --outFileNamePrefix ${SRAID}
         --limitBAMsortRAM ${task.memory.toBytes()} > ${SRAID}.bam 
     """
 }
@@ -263,7 +263,7 @@ process fastq_screen {
     
     script:
     """
-    sed -i "s|/.*/FastQ_Screen_Genomes|$PWD/FastQ_Screen_Genomes|g" ./FastQ_Screen_Genomes/fastq_screen.conf
+    sed -i "s|/.*/FastQ_Screen_Genomes|\$PWD/FastQ_Screen_Genomes|g" ./FastQ_Screen_Genomes/fastq_screen.conf
     fastq_screen --threads ${task.cpus}\
                  --conf ./FastQ_Screen_Genomes/fastq_screen.conf \
                  --aligner bowtie2\
