@@ -1,0 +1,49 @@
+Module	Section	Sample Name	Source
+featureCounts	all_sections	SRR628586	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/outputs_exon.count.summary
+featureCounts	all_sections	SRR628582	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/outputs_exon.count.summary
+featureCounts	all_sections	SRR628584	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/outputs_exon.count.summary
+featureCounts	all_sections	SRR628588	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/outputs_exon.count.summary
+featureCounts	all_sections	SRR628589	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/outputs_exon.count.summary
+featureCounts	all_sections	SRR628585	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/outputs_exon.count.summary
+featureCounts	all_sections	SRR628587	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/outputs_exon.count.summary
+featureCounts	all_sections	SRR628583	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/outputs_exon.count.summary
+STAR	SummaryLog	SRR628582	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628582Log.final.out
+STAR	SummaryLog	SRR628584	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628584Log.final.out
+STAR	SummaryLog	SRR628587	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628587Log.final.out
+STAR	SummaryLog	SRR628588	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628588Log.final.out
+STAR	SummaryLog	SRR628585	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628585Log.final.out
+STAR	SummaryLog	SRR628589	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628589Log.final.out
+STAR	SummaryLog	SRR628583	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628583Log.final.out
+STAR	SummaryLog	SRR628586	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628586Log.final.out
+FastQ Screen	all_sections	SRR628582_1_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628582_1_screen.txt
+FastQ Screen	all_sections	SRR628582_2_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628582_2_screen.txt
+FastQ Screen	all_sections	SRR628586_1_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628586_1_screen.txt
+FastQ Screen	all_sections	SRR628586_2_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628586_2_screen.txt
+FastQ Screen	all_sections	SRR628588_1_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628588_1_screen.txt
+FastQ Screen	all_sections	SRR628588_2_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628588_2_screen.txt
+FastQ Screen	all_sections	SRR628584_1_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628584_1_screen.txt
+FastQ Screen	all_sections	SRR628584_2_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628584_2_screen.txt
+FastQ Screen	all_sections	SRR628585_1_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628585_1_screen.txt
+FastQ Screen	all_sections	SRR628585_2_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628585_2_screen.txt
+FastQ Screen	all_sections	SRR628587_1_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628587_1_screen.txt
+FastQ Screen	all_sections	SRR628587_2_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628587_2_screen.txt
+FastQ Screen	all_sections	SRR628583_1_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628583_1_screen.txt
+FastQ Screen	all_sections	SRR628583_2_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628583_2_screen.txt
+FastQ Screen	all_sections	SRR628589_1_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628589_1_screen.txt
+FastQ Screen	all_sections	SRR628589_2_screen	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628589_2_screen.txt
+FastQC	all_sections	SRR628584_1	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628584_1_fastqc.zip
+FastQC	all_sections	SRR628584_2	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628584_2_fastqc.zip
+FastQC	all_sections	SRR628586_1	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628586_1_fastqc.zip
+FastQC	all_sections	SRR628586_2	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628586_2_fastqc.zip
+FastQC	all_sections	SRR628588_1	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628588_1_fastqc.zip
+FastQC	all_sections	SRR628588_2	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628588_2_fastqc.zip
+FastQC	all_sections	SRR628582_1	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628582_1_fastqc.zip
+FastQC	all_sections	SRR628582_2	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628582_2_fastqc.zip
+FastQC	all_sections	SRR628585_1	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628585_1_fastqc.zip
+FastQC	all_sections	SRR628585_2	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628585_2_fastqc.zip
+FastQC	all_sections	SRR628587_1	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628587_1_fastqc.zip
+FastQC	all_sections	SRR628587_2	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628587_2_fastqc.zip
+FastQC	all_sections	SRR628583_1	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628583_1_fastqc.zip
+FastQC	all_sections	SRR628583_2	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628583_2_fastqc.zip
+FastQC	all_sections	SRR628589_1	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628589_1_fastqc.zip
+FastQC	all_sections	SRR628589_2	/mnt/mydatalocal/ReproHackaton/work/e9/48e34b7197c727194a86e82d7b00a9/SRR628589_2_fastqc.zip

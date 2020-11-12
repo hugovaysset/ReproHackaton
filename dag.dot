@@ -1,0 +1,138 @@
+digraph "dag" {
+p0 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.fromPath"];
+p1 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="into"];
+p0 -> p1;
+
+p1 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="into"];
+p19 [label="statAnalysis"];
+p1 -> p19 [label="samples_metadata_1"];
+
+p1 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="into"];
+p20 [label="statAnalysisSplicing"];
+p1 -> p20 [label="samples_metadata_2"];
+
+p2 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.of"];
+p4 [label="getFASTQ"];
+p2 -> p4 [label="SRA"];
+
+p3 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.of"];
+p5 [label="getChrSeq"];
+p3 -> p5 [label="chr_list"];
+
+p4 [label="getFASTQ"];
+p9 [label="mapFASTQ"];
+p4 -> p9 [label="fastq_files_to_map"];
+
+p4 [label="getFASTQ"];
+p21 [label="fastqc"];
+p4 -> p21 [label="fastq_files_to_qc"];
+
+p4 [label="getFASTQ"];
+p23 [label="fastq_screen"];
+p4 -> p23 [label="fastq_files_to_screen"];
+
+p5 [label="getChrSeq"];
+p6 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p5 -> p6 [label="chrfa"];
+
+p6 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p7 [label="makeGenomeIndex"];
+p6 -> p7;
+
+p7 [label="makeGenomeIndex"];
+p9 [label="mapFASTQ"];
+p7 -> p9 [label="genome_idx"];
+
+p8 [label="getAnnotations"];
+p14 [label="countFeature"];
+p8 -> p14 [label="gtf_file"];
+
+p9 [label="mapFASTQ"];
+p10 [label="indexBAM"];
+p9 -> p10 [label="bamfiles"];
+
+p9 [label="mapFASTQ"];
+p25 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p9 -> p25 [label="star_stats"];
+
+p10 [label="indexBAM"];
+p11 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="flatten"];
+p10 -> p11 [label="indexedBAM_1"];
+
+p10 [label="indexBAM"];
+p15 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="flatten"];
+p10 -> p15 [label="indexedBAM_2"];
+
+p11 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="flatten"];
+p12 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="filter"];
+p11 -> p12;
+
+p12 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="filter"];
+p13 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p12 -> p13;
+
+p13 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p14 [label="countFeature"];
+p13 -> p14;
+
+p14 [label="countFeature"];
+p19 [label="statAnalysis"];
+p14 -> p19 [label="counts"];
+
+p14 [label="countFeature"];
+p27 [label="multi_qc"];
+p14 -> p27 [label="counts_summary"];
+
+p15 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="flatten"];
+p16 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="filter"];
+p15 -> p16;
+
+p16 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="filter"];
+p17 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p16 -> p17;
+
+p17 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p18 [label="countExon"];
+p17 -> p18;
+
+p8 [label="getAnnotations"];
+p18 [label="countExon"];
+p8 -> p18 [label="gtf_file"];
+
+p18 [label="countExon"];
+p20 [label="statAnalysisSplicing"];
+p18 -> p20 [label="exoncounts"];
+
+p18 [label="countExon"];
+p27 [label="multi_qc"];
+p18 -> p27 [label="exoncounts_summary"];
+
+p8 [label="getAnnotations"];
+p20 [label="statAnalysisSplicing"];
+p8 -> p20 [label="gtf_file"];
+
+p21 [label="fastqc"];
+p24 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p21 -> p24 [label="fastqc_results"];
+
+p22 [label="get_fastq_screen_genomes"];
+p23 [label="fastq_screen"];
+p22 -> p23 [label="FastQ_Screen_Genomes"];
+
+p23 [label="fastq_screen"];
+p26 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p23 -> p26 [label="fastq_screen_txt"];
+
+p24 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p27 [label="multi_qc"];
+p24 -> p27;
+
+p25 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p27 [label="multi_qc"];
+p25 -> p27;
+
+p26 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="collect"];
+p27 [label="multi_qc"];
+p26 -> p27;
+
+}

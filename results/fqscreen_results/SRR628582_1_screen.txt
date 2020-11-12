@@ -1,0 +1,18 @@
+#Fastq_screen version: 0.14.0	#Aligner: bowtie2	#Reads in subset: 100000
+Genome	#Reads_processed	#Unmapped	%Unmapped	#One_hit_one_genome	%One_hit_one_genome	#Multiple_hits_one_genome	%Multiple_hits_one_genome	#One_hit_multiple_genomes	%One_hit_multiple_genomes	Multiple_hits_multiple_genomes	%Multiple_hits_multiple_genomes
+Human	100129	937	0.95	41248	41.19	29172	29.13	6932	6.92	21840	21.81
+Mouse	100129	80785	80.68	4	0.00	0	0.00	7858	7.85	11482	11.47
+Rat	100129	80249	80.15	1	0.00	0	0.00	8161	8.15	11718	11.70
+Drosophila	100129	99525	99.40	0	0.00	0	0.00	164	0.16	440	0.44
+Worm	100129	99828	99.70	0	0.00	0	0.00	106	0.11	195	0.19
+Yeast	100129	99756	99.63	0	0.00	0	0.00	24	0.02	349	0.35
+Arabidopsis	100129	99654	99.52	0	0.00	0	0.00	89	0.09	386	0.39
+Ecoli	100129	100129	100.00	0	0.00	0	0.00	0	0.00	0	0.00
+rRNA	100129	99289	99.16	0	0.00	0	0.00	120	0.12	720	0.72
+MT	100129	95705	95.58	0	0.00	0	0.00	3951	3.95	473	0.47
+PhiX	100129	100050	99.92	78	0.08	1	0.00	0	0.00	0	0.00
+Lambda	100129	100129	100.00	0	0.00	0	0.00	0	0.00	0	0.00
+Vectors	100129	99633	99.50	0	0.00	0	0.00	117	0.12	379	0.38
+Adapters	100129	99625	99.49	14	0.01	6	0.01	27	0.03	457	0.46
+
+%Hit_no_genomes: 0.42
