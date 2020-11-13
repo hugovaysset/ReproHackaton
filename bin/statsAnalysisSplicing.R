@@ -23,19 +23,22 @@ aggregates <- read.delim(gtf_path, stringsAsFactors = FALSE,
   dplyr::filter(class == "exon") %>% # retain only exon entry
   dplyr::mutate(attr = str_remove_all(attr, "\"|=|;"),
                 gene_id = sub(".*gene_id\\s(\\S+).*", "\\1", attr),
-                exon_id = sub(".*exon_id\\s(\\S+).*", "\\1", attr)) %>%
+                exon_id = sub(".*exon_id\\s(\\S+).*", "\\1", attr),
+                gene_name = sub(".*gene_name\\s(\\S+).*", "\\1", attr)) %>%
   dplyr::distinct(gene_id, exon_id, .keep_all = TRUE)
 
 gene_exon <- dplyr::mutate(aggregates, join = str_c(gene_id, start, end, sep = "-")) %>%
-  dplyr::select(join, exon_id)
+  dplyr::select(join, exon_id, gene_name)
 
 transcripts <- gsub(".*transcript_id\\s(\\S+).*", "\\1",
                     aggregates$attr)
 
 exoninfo <- GRanges(as.character(aggregates$chr), IRanges(start = aggregates$start,
-                                                          end = aggregates$end), strand = aggregates$strand)
+                                                          end = aggregates$end), 
+                    strand = aggregates$strand, gene_name = aggregates$gene_name, 
+                    ensemblID = aggregates$gene_id)
 
-names(exoninfo) <- str_c(aggregates$gene_id, aggregates$exon_id, sep = ":")
+names(exoninfo) <- str_c(aggregates$gene_name, aggregates$exon_id, sep = ":")
 
 names(transcripts) <- names(exoninfo)
 
@@ -48,7 +51,7 @@ read.table(input_path, header = TRUE) %>%
   dplyr::distinct() %>%
   dplyr::mutate(join = str_c(Geneid, Start, End, sep = "-")) %>%
   dplyr::inner_join(gene_exon) %>%
-  dplyr::mutate(name = str_c(Geneid, exon_id, sep = ":")) %>%
+  dplyr::mutate(name = str_c(gene_name, exon_id, sep = ":")) %>%
   magrittr::set_rownames(.$name) %>%
   dplyr::select(-(Geneid:Length), -(join:name)) -> dcounts
 
@@ -75,18 +78,26 @@ dxr <- estimateSizeFactors(dxd) %>%
           DEXSeqResults()
 
 # Plot if differential splicing
-results <- dxr[which(dxr$padj < 0.1), ]
+results <- dxr[which(dxr$padj < 0.01), ]
 
-if (!is.null(nrow(results@listData))) {
-    for (gene in results$groupID) {
-        png(filename = paste0("DEXseq_results_",gene,".png"))
-        plotDEXSeq(results, gene, legend = TRUE, cex.axis = 1.2, cex = 1.3, lwd = 2)
-        dev.off()
-    }
-} else {
-    png(filename = "DEXseq_results.png")
-    plot(0,0)
-    text(0, 0, "No differential splicing")
+if (length(results@listData[[1]]) != 0) {
+  # get top 10 genes
+  gene_interest <- as.data.frame(results) %>% 
+    dplyr::top_n(10,log2fold_WT_Mut) %>% 
+    dplyr::pull(groupID)
+  
+  for (gene in gene_interest) {
+    png(filename = paste0("DEXseq_results_",gene,".png"))
+    plotDEXSeq(dxr, gene, fitExpToVar = "SF3B1", legend = TRUE, cex.axis = 1.2, cex = 1.3, lwd = 2)
     dev.off()
+  }
+  # write table
+  results %>% as.data.frame() %>% write.csv("DEXSeq_results.csv")
+  
+} else {
+  png(filename = "DEXseq_results.png")
+  plot(0,0)
+  text(0, 0, "No differential splicing")
+  dev.off()
 }
 saveRDS(dxr, output_path)
