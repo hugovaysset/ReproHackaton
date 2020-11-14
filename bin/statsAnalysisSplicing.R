@@ -38,7 +38,7 @@ exoninfo <- GRanges(as.character(aggregates$chr), IRanges(start = aggregates$sta
                     strand = aggregates$strand, gene_name = aggregates$gene_name, 
                     ensemblID = aggregates$gene_id)
 
-names(exoninfo) <- str_c(aggregates$gene_name, aggregates$exon_id, sep = ":")
+names(exoninfo) <- str_c(aggregates$gene_id, aggregates$exon_id, sep = ":")
 
 names(transcripts) <- names(exoninfo)
 
@@ -51,7 +51,7 @@ read.table(input_path, header = TRUE) %>%
   dplyr::distinct() %>%
   dplyr::mutate(join = str_c(Geneid, Start, End, sep = "-")) %>%
   dplyr::inner_join(gene_exon) %>%
-  dplyr::mutate(name = str_c(gene_name, exon_id, sep = ":")) %>%
+  dplyr::mutate(name = str_c(gene_id, exon_id, sep = ":")) %>%
   magrittr::set_rownames(.$name) %>%
   dplyr::select(-(Geneid:Length), -(join:name)) -> dcounts
 
