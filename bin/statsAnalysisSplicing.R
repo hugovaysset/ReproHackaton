@@ -28,7 +28,7 @@ aggregates <- read.delim(gtf_path, stringsAsFactors = FALSE,
   dplyr::distinct(gene_id, exon_id, .keep_all = TRUE)
 
 gene_exon <- dplyr::mutate(aggregates, join = str_c(gene_id, start, end, sep = "-")) %>%
-  dplyr::select(join, exon_id, gene_name)
+  dplyr::select(join, exon_id, gene_id)
 
 transcripts <- gsub(".*transcript_id\\s(\\S+).*", "\\1",
                     aggregates$attr)
