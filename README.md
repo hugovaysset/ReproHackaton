@@ -1,5 +1,26 @@
 # Projet ReproHackaton
 
+## Organisation du dépôt
+
+### Branche main
+
+Cette branche contient l'ensemble du code nécessaire à l'exécution du pipeline. Le fichier [main.nf](https://github.com/hugovaysset/ReproHackaton/blob/main/main.nf) contient l'ensemble des process nécessaire à l'éxécution du pipeline. Le fichier de configuration [nextflow.config](https://github.com/hugovaysset/ReproHackaton/blob/main/nextflow.config) spécifie la configuration utlisée par le pipeline et en particulier les images docker utilisées par chacun des process. Le dossier [bin](https://github.com/hugovaysset/ReproHackaton/tree/main/bin) contient les scripts R utilisées par les process [statAnalysis](https://github.com/hugovaysset/ReproHackaton/blob/main/main.nf#L205) et [statAnalysisSplicing](https://github.com/hugovaysset/ReproHackaton/blob/main/main.nf#L225) pour l'analyse de l'expresion différentielle et l'épissage atlernatif respectivement. 
+Le dossier [Docker](https://github.com/hugovaysset/ReproHackaton/tree/main/Docker) contient les Dockerfiles utilisés pour la création des images docker nécessaire à l'exécution du pipeline nextflow. 
+
+### Banche results_DE_genes 
+Cette branche contient les résultats d'une première version du pipeline ne permettant que la recherche de gènes différentiellement exprimés. 
+Le dossier [reports](https://github.com/hugovaysset/ReproHackaton/tree/results_DE_genes/reports) contient les rapports d'exécution du pipeline généré par nextflow.
+Le dossier [results](https://github.com/hugovaysset/ReproHackaton/tree/results_DE_genes/results/DE_genes) contient la table de gènes différentiellement exprimés détectés par `DESeq2`. 
+
+### Branche results_splicing
+Cette branche contient les résultat de la dernière version du pipeline avec le contrôle qualité des reads, la recherche de gènes différentiellement exprimés et la recherche d'épissage alternatif. 
+Le dossier [reports](https://github.com/hugovaysset/ReproHackaton/tree/results_splicing/reports) contient les rapports d'exécution du pipeline généré par nextflow.
+Le dossier [results](https://github.com/hugovaysset/ReproHackaton/tree/results_splicing/results) contient des résultats de l'exécution du pipeline : 
+- Contrôle qualité : [FastQC](https://github.com/hugovaysset/ReproHackaton/tree/results_splicing/results/fastqc_results) et [Fastq Screen](https://github.com/hugovaysset/ReproHackaton/tree/results_splicing/results/fqscreen_results)
+- [Épissage alternatif](https://github.com/hugovaysset/ReproHackaton/tree/results_splicing/results/DE_splicing)
+- [Expression différentielle](https://github.com/hugovaysset/ReproHackaton/tree/results_splicing/results/DE_genes)
+- [Rapport MultiQC](https://github.com/hugovaysset/ReproHackaton/tree/results_splicing/results/multiqc_results)
+
 ## Ressources
 - Dépôt github (contient le code du projet)
 - Google drive (contient les fichiers binaires (articles, documentations, rapport))
@@ -13,11 +34,14 @@ Nous nous intéressons dans un premier temps à identifier quels sont les gènes
 ## Méthodes
 
 Pour garantir la reproductibilité de notre pipeline d'analyse, nous utilisons le gestionnaire de workflow *nextflow*. Les étapes du workflow sont les suivantes:
-1. Récupération des données de séquençage.
+1. Récupération des données de séquençage à l'aide de [SRA toolkit](https://github.com/ncbi/sra-tools).
 2. Récupération du génome de référence sur le site du [NCBI](https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.39) et les [annotations](ftp://ftp.ensembl.org/pub/release-101/gtf/homo_sapiens/Homo_sapiens.GRCh38.101.chr.gtf.gz) de ce génome.
-3. Alignement des reads sur le génome de référence en utilisant l'outil [STAR](https://github.com/alexdobin/STAR).
-4. Attribution des reads à chacun des gènes à partir du résultat de l'alginement (fichier BAM) via l'outil.
-5. Analyse statistique avec le package R [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html).
+3. Contrôle qualité des reads avec [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) et [Fastq Screen](https://www.bioinformatics.babraham.ac.uk/projects/fastq_screen/)
+4. Alignement des reads sur le génome de référence en utilisant l'outil [STAR](https://github.com/alexdobin/STAR).
+5. Attribution des reads à chacun des gènes à partir du résultat de l'alginement (fichier BAM) via l'outil [featureCounts](http://bioinf.wehi.edu.au/featureCounts/).
+6. Analyse statistique avec le package R [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html).
+7. Analyse de l'épissage alternatif avec le package R [DEXSeq](https://bioconductor.org/packages/release/bioc/html/DEXSeq.html)
+8. Aggrégation des résultats avec [MultiQC](https://multiqc.info/)
 
 ## Notes
 
